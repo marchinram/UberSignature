@@ -38,6 +38,7 @@ public class SignatureDrawingViewController: UIViewController {
      */
     public init(image: UIImage? = nil) {
         super.init(nibName: nil, bundle: nil)
+        presetImage = image
     }
     
     /// Use init(image:) instead.
