@@ -39,7 +39,26 @@ public class SignatureDrawingView: UIView {
     public init(image: UIImage? = nil) {
         super.init(frame: .zero)
         presetImage = image
+        internalInit()
+    }
 
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        internalInit()
+    }
+
+    public var image: UIImage? {
+        didSet {
+            guard let image = image else {
+                reset()
+                return
+            }
+            model.addImageToSignature(image)
+            updateViewFromModel()
+        }
+    }
+
+    private func internalInit() {
         backgroundColor = UIColor.clear
         addSubview(imageView)
 
@@ -54,11 +73,6 @@ public class SignatureDrawingView: UIView {
             NSLayoutConstraint.init(item: imageView, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1, constant: 0),
             NSLayoutConstraint.init(item: imageView, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: 0),
             ])
-    }
-
-    /// Use init(image:) instead.
-    public required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     /// Returns an image of the signature (with a transparent background).
