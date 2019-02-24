@@ -53,8 +53,12 @@ public class SignatureDrawingView: UIView {
                 reset()
                 return
             }
-            model.addImageToSignature(image)
-            updateViewFromModel()
+            if didLayoutSubviews {
+                model.addImageToSignature(image)
+                updateViewFromModel()
+            } else {
+                presetImage = image
+            }
         }
     }
 
@@ -128,6 +132,7 @@ public class SignatureDrawingView: UIView {
             presetImage = nil
         }
         updateViewFromModel()
+        didLayoutSubviews = true
     }
 
     // MARK: UIResponder
@@ -156,6 +161,8 @@ public class SignatureDrawingView: UIView {
 
     private var imageView = UIImageView()
     private var presetImage: UIImage?
+
+    private var didLayoutSubviews = false;
 
     private func updateModel(withTouches touches: Set<UITouch>, shouldEndContinousLine: Bool) {
         guard let touchPoint = touches.touchPoint else {
