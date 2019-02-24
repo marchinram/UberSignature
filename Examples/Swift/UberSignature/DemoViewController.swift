@@ -29,31 +29,26 @@ class DemoViewController: UIViewController, SignatureDrawingViewControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor.white
-        
+
         signatureViewController.delegate = self
         addChildViewController(signatureViewController)
         view.addSubview(signatureViewController.view)
         signatureViewController.didMove(toParentViewController: self)
-        
+
         resetButton.addTarget(self, action: #selector(resetTapped), for: .touchUpInside)
         view.addSubview(resetButton)
-        
+
         // Constraints
-        
+
         resetButton.translatesAutoresizingMaskIntoConstraints = false
+        resetButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        resetButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
         view.addConstraints([
-            NSLayoutConstraint.init(item: resetButton, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 20),
-            NSLayoutConstraint.init(item: resetButton, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 20),
-            
             NSLayoutConstraint.init(item: signatureViewController.view, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0),
             NSLayoutConstraint.init(item: signatureViewController.view, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0),
             NSLayoutConstraint.init(item: signatureViewController.view, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0),
             NSLayoutConstraint.init(item: signatureViewController.view, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0),
             ])
-        
-        
     }
     
     // MARK: SignatureDrawingViewControllerDelegate
@@ -63,9 +58,9 @@ class DemoViewController: UIViewController, SignatureDrawingViewControllerDelega
     }
     
     // MARK: Private
-    
+
     private let signatureViewController = SignatureDrawingViewController()
-    
+
     private let resetButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("Reset", for: .normal)
