@@ -24,7 +24,9 @@ import UIKit
 
 public protocol SignatureDrawingViewDelegate: class {
     /// Callback when isEmpty changes, due to user drawing or reset() being called.
-    func signatureDrawingViewIsEmptyDidChange(controller: SignatureDrawingView, isEmpty: Bool)
+    func signatureDrawingViewIsEmptyDidChange(view: SignatureDrawingView, isEmpty: Bool)
+    func signatureDrawingViewBeganDrawing(view: SignatureDrawingView)
+    func signatureDrawingViewEndedDrawing(view: SignatureDrawingView)
 }
 
 /**
@@ -107,7 +109,7 @@ public class SignatureDrawingView: UIView {
     private(set) var isEmpty = true {
         didSet {
             if isEmpty != oldValue {
-                delegate?.signatureDrawingViewIsEmptyDidChange(controller: self, isEmpty: isEmpty)
+                delegate?.signatureDrawingViewIsEmptyDidChange(view: self, isEmpty: isEmpty)
             }
         }
     }
@@ -140,11 +142,22 @@ public class SignatureDrawingView: UIView {
     override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         updateModel(withTouches: touches, shouldEndContinousLine: true)
+        delegate?.signatureDrawingViewBeganDrawing(view: self)
     }
 
     override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         updateModel(withTouches: touches, shouldEndContinousLine: false)
+    }
+
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        delegate?.signatureDrawingViewEndedDrawing(view: self)
+    }
+
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        delegate?.signatureDrawingViewEndedDrawing(view: self)
     }
 
     // MARK: Private
